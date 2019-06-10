@@ -11,7 +11,7 @@ use Mix.Config
 # before starting your production server.
 config :chat, ChatWeb.Endpoint,
   load_from_system_env: true,
-  url: [host: "elixir-chat-app-ex.herokuapp.com", port: 80],
+  url: [host: "elixir-chat-app-ex.herokuapp.com", port: 443],
   force_ssl: [rewrite_on: [:x_forwarded_proto]],
   cache_static_manifest: "priv/static/cache_manifest.json",
   secret_key_base: Map.fetch!(System.get_env(), "SECRET_KEY_BASE")
@@ -65,4 +65,16 @@ config :logger, level: :info
 
 # Finally import the config/prod.secret.exs which loads secrets
 # and configuration from environment variables.
-import_config "prod.secret.exs"
+# import_config "prod.secret.exs"
+
+database_url =
+  System.get_env("DATABASE_URL") ||
+    raise """
+    environment variable DATABASE_URL is missing.
+    For example: ecto://USER:PASS@HOST/DATABASE
+    """
+
+config :chat, Chat.Repo,
+  ssl: true,
+  url: database_url,
+  pool_size: String.to_integer(System.get_env("POOL_SIZE") || "10")
