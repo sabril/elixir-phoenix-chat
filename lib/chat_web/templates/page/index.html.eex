@@ -1,4 +1,3 @@
-<h1>Welcome to Phoenix!</h1>
 <ul id='msg-list' class='col-12' style='list-style: none; min-height:200px; padding: 10px;'></ul>
 
 <div class="row">
